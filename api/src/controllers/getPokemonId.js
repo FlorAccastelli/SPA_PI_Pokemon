@@ -27,3 +27,9 @@
 // }
 
 // module.exports = getPokemonId;
+
+const getPokemonId = (req, res) => {
+    res.send("Getting Pokemon id")
+}
+
+module.exports = getPokemonId;

@@ -18,3 +18,8 @@
 
 // module.exports = getPokemons;
 
+const getPokemons = (req, res) => {
+    res.send("Getting pokemons")
+}
+
+module.exports = getPokemons;
