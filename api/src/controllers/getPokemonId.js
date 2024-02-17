@@ -1,35 +1,38 @@
-// const axios = require('axios');
-// const URL = 'https://pokeapi.co/api/v2/pokemon/'
+const axios = require('axios');
+const URL = 'https://pokeapi.co/api/v2/pokemon/'
+const { Pokemon, PokemonType } = require("../db");
 
-// async function getPokemonIdFromDB(id) {
-//     return null
-// }
+async function getPokemonId(req, res) {
+    try {
+        const { idPokemon } = req.params;
 
-// async function getPokemonId(req, res) {
-//     try {
-//         const pokemonId = req.params.id;
-//         let pokemonData = await(getPokemonIdFromDB(pokemonId));
-//         if(!pokemonData) {
-//             //acá hacer algo
-//         }
-//         const { data } = await axios.get(`${URL}${pokemonId}`);
-//         const { id, name, height, moves, abilities } = data;
-//         const character = { id, name, height, moves, abilities };
-//         if (character.name) {
-//             return res.status(200).json(character);
-//         } else {
-//             return res.status(404).send('Not found');
-//         }
+        let pokemon = await Pokemon.findByPk(idPokemon, { include: PokemonType });
+    
+        if(!pokemon) {
+            const response = await axios.get(`${URL}${idPokemon}`);
+            const data = response.data;
 
-//     } catch(error){
-//         res.status(500).send(error.message);
-//     }
-// }
+            pokemon = await Pokemon.create({
+                id: data.id,
+                name: data.name,
+                image: data.sprites.front_default,
+                health: data.stats[0].base_stat,
+                attack: data.stats[1].base_stat,
+                defense: data.stats[2].base_stat,
+                speed: data.stats[5].base_stat,
+                height: data.height,
+                weight: data.weight,
+            })
 
-// module.exports = getPokemonId;
+            const types = data.types.map(type => type.type.name);
+            await pokemon.setPokemonTypes(types);
+            pokemon = await Pokemon.findByPk(idPokemon, { include: PokemonType }); 
+        }   
+        res.json(pokemon);
 
-const getPokemonId = (req, res) => {
-    res.send("Getting Pokemon id")
+    } catch(error){
+        res.status(500).send("No encontrado");
+    }
 }
 
 module.exports = getPokemonId;
