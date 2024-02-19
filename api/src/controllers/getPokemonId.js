@@ -15,23 +15,26 @@ async function getPokemonId(req, res) {
             pokemon = await Pokemon.create({
                 id: data.id,
                 name: data.name,
-                image: data.sprites.front_default,
-                health: data.stats[0].base_stat,
-                attack: data.stats[1].base_stat,
-                defense: data.stats[2].base_stat,
-                speed: data.stats[5].base_stat,
+                image: data.sprites.other["official-artwork"].front_default,
+                health: data.stats.find(stat => stat.stat.name === 'hp').base_stat,
+                attack: data.stats.find(stat => stat.stat.name === 'attack').base_stat,
+                defense: data.stats.find(stat => stat.stat.name === 'defense').base_stat,
+                speed: data.stats.find(stat => stat.stat.name === 'speed').base_stat,
                 height: data.height,
                 weight: data.weight,
-            })
+            });
 
-            const types = data.types.map(type => type.type.name);
-            await pokemon.setPokemonTypes(types);
-            pokemon = await Pokemon.findByPk(idPokemon, { include: PokemonType }); 
+            const typesFromAPI = data.types.map(type => type.type.name);
+            for (const typeName of typesFromAPI) {
+                const [type, created] = await PokemonType.findOrCreate({ where: { name: typeName } });
+                await pokemon.addPokemonType(type);
+            }
+            
         }   
         res.json(pokemon);
 
     } catch(error){
-        res.status(500).send("No encontrado");
+        res.status(500).send("Error interno en el servidor");
     }
 }
 

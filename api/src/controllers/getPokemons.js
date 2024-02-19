@@ -8,7 +8,13 @@ async function getPokemons(req, res) {
         if(pokemons.length > 0) {
             res.json(pokemons);
         } else {
-            const response = await axios.get(`${URL}`);
+            const response = await axios.get(`${URL}`, {
+                params: {
+                    limit: 20,
+                    offset: 0
+                }
+            });
+
             const data =  response.data.results;
             res.json(data);
         }
