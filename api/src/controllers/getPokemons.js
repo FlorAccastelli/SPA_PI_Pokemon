@@ -4,20 +4,14 @@ const { Pokemon } = require('../db.js');
 
 async function getPokemons(req, res) {
     try {
-        let pokemons = await Pokemon.findAll();
-        if(pokemons.length > 0) {
-            res.json(pokemons);
-        } else {
-            const response = await axios.get(`${URL}`, {
-                params: {
-                    limit: 20,
-                    offset: 0
-                }
-            });
+        const dbPokemons = await Pokemon.findAll();
+        const response = await axios.get(`${URL}`);
 
-            const data =  response.data.results;
-            res.json(data);
-        }
+        const ApiPokemons = response.data.results;
+        const allPokemons = [...dbPokemons, ...ApiPokemons];
+        res.json(allPokemons);
+        
+        
     } catch(error){
         res.status(500).json({ error: "Error interno del servidor" });
     }

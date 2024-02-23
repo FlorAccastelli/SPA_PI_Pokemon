@@ -5,20 +5,41 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-image: url('../../pokemon_images/Fantastic-Pokemon-Wallpaper-Background.jpg');
+    background-image: url('../../pokemon_images/Pokémon-wallpapers-5.jpg');
   }
   
   h1 {
+    text-align: center;  
+    background-color: #007bff; 
+    font-size: 80px;
+    color: yellow;
+    padding: 5px 10px;
+    display: inline-block;
+    margin: 20px auto;
+  }
+
+  h2 {
     text-align: center; 
-    color: #d30f0f; 
+    color: #007bff; 
     font-size: 55px;
   }
+
+  p {
+    text-align: center;
+    font-size: 25px;
+    background-color: rgba(255, 255, 255, 0.5); /* Color de fondo transparente */
+    padding: 20px; /* Espacio alrededor del texto */
+    border-radius: 10px; /* Bordes redondeados */
+    width: 50%; /* Ancho del párrafo */
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
   
   button {
     display: block; 
     margin: 0 auto; 
     padding: 10px 20px; 
-    font-size: 18px; 
+    font-size: 30px; 
     background-color: #007bff; 
     color: #fff; 
     border: none; 
