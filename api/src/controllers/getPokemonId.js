@@ -15,7 +15,7 @@ async function getPokemonId(req, res) {
             pokemon = await Pokemon.create({
                 id: data.id,
                 name: data.name,
-                image: data.sprites.other["official-artwork"].front_default,
+                image: data.sprites.front_default,
                 health: data.stats.find(stat => stat.stat.name === 'hp').base_stat,
                 attack: data.stats.find(stat => stat.stat.name === 'attack').base_stat,
                 defense: data.stats.find(stat => stat.stat.name === 'defense').base_stat,

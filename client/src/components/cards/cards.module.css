@@ -1,0 +1,23 @@
+.cardContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 200px; /* Ancho deseado para cada tarjeta */
+    margin: 10px; /* Espacio entre cada tarjeta */
+}
+
+.card:hover {
+    transform: scale(1.1); /* Escalar la tarjeta al 110% del tamaño original */
+    transition: transform 0.3s ease; /* Agregar una transición suave */
+}
+
+  

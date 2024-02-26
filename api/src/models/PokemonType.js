@@ -4,9 +4,9 @@ module.exports = (sequelize) => {
 
   sequelize.define('PokemonType', {
     id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: Sequelize.UUIDV4
+          type: Sequelize.INTEGER,
+          autoIncrement: true,
+          primaryKey: true
     },
     name: {
       type: DataTypes.STRING,

@@ -1,18 +1,21 @@
 import React from 'react';
-import Card from '../card/Card'; // Importar el componente Card
+import Card from '../card/Card';
+import styles from './cards.module.css';
 
 const Cards = ({ pokemonData, showFullInfo }) => {
     return (
-        <div>
-            <h2>Datos de los Pokémon:</h2>
+        <div className={styles.cardContainer}>
             {pokemonData.map((pokemon, index) => (
-                <Card key={index} pokemon={pokemon} showFullInfo={showFullInfo} /> 
+                <div key={index} className={styles.card}>
+                <Card pokemon={pokemon} showFullInfo={showFullInfo} /> 
+            </div>
             ))}
         </div>
     );
 }
 
 export default Cards;
+
 
 
 

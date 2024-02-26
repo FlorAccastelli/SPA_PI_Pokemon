@@ -1,20 +1,44 @@
-import React from 'react';
+// En Card.jsx
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import styles from './card.module.css';
 
 const Card = ({ pokemon }) => {
+    const [pokemonType, setPokemonType] = useState(null);
+
+    useEffect(() => {
+        const fetchPokemonType = async () => {
+            try {
+                const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.name}`);
+                if (response.status === 200) {
+                    const types = response.data.types.map(type => type.type.name);
+                    setPokemonType(types.join(', '));
+                } else {
+                    throw new Error('Error fetching Pokemon type');
+                }
+            } catch (error) {
+                console.error('Error fetching Pokemon type:', error);
+            }
+        };
+
+        fetchPokemonType();
+    }, [pokemon.name]);
+
     return (
-        <div className="Cards">
-            <Link to={`/detail/${pokemon.id}`}>
-                <h2>Datos del Pokémon:</h2>
-                <img src={pokemon.image} alt={pokemon.name} className="CardImage" />
-                <p>Nombre: {pokemon.name}</p>
-                {pokemon.types && <p>Tipo: {pokemon.types.join(', ')}</p>} {/* Verificar si pokemon.types existe */}
+        <div className={styles.card}>
+            <Link to={`/detail/${pokemon.id}`} className={styles.link}>
+                <img className={styles.cardImage} src={pokemon.image} alt={pokemon.name} />
+                <p className={styles.cardName}>{pokemon.name}</p>
+                {pokemonType && <p>Tipo: {pokemonType}</p>}
             </Link>
         </div>
     );
 }
 
 export default Card;
+
+
 
 
 

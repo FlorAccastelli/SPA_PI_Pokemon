@@ -1,0 +1,55 @@
+.pageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('../../pokemon_images/592678.jpg');
+}
+
+.detailContainer {
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #333; /* Ajusta el estilo del borde según tus preferencias */
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: azure;
+  }
+  
+  .detailTitle {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .detailImage {
+    width: 200px;
+    height: 200px; /* Ajusta la altura máxima según tus necesidades */
+    object-fit: contain;
+  }
+  
+  .detailText {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .buttonContainer {
+    margin-top: 20px;
+  }
+  
+  .button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #0056b3;
+  }
