@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { filterByType, sortByAscName, sortByDescName } from '../../redux/actions';
+import { filterByType, sortByAscName, sortByDescName, sortByAscAttack, sortByDescAttack } from '../../redux/actions';
 // import { filterByOriginDB, filterByOriginAPI } from '../../redux/actions';
 import Cards from '../cards/Cards'; // Importar el componente Cards
 import Detail from '../detail/Detail'; // Importar el componente Detail
@@ -11,7 +11,7 @@ import styles from './HomePage.module.css';
 const POKEMONS_PER_PAGE = 12;
 
 // const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) => {
-const HomePage = ({ filterByType, sortByAscName, sortByDescName }) => {
+const HomePage = ({ filterByType, sortByAscName, sortByDescName, sortByAscAttack, sortByDescAttack }) => {
     const [name, setName] = useState("");
     const [pokemonData, setPokemonData] = useState([]);
     const [error, setError] = useState(null);
@@ -119,12 +119,12 @@ const HomePage = ({ filterByType, sortByAscName, sortByDescName }) => {
             case 'descName':
                 sortByDescName(); // Ordenar por nombre descendente
                 break;
-            // case 'ascAttack':
-            //     sortByAscAttack(); // Ordenar por ataque ascendente
-            //     break;
-            // case 'descAttack':
-            //     sortByDescAttack(); // Ordenar por ataque descendente
-            //     break;
+            case 'ascAttack':
+                sortByAscAttack(); // Ordenar por ataque ascendente
+                break;
+            case 'descAttack':
+                sortByDescAttack(); // Ordenar por ataque descendente
+                break;
             default:
                 break;
         }
@@ -140,8 +140,12 @@ const HomePage = ({ filterByType, sortByAscName, sortByDescName }) => {
             filteredPokemons.sort((a, b) => a.name.localeCompare(b.name)); // Orden ascendente por nombre
         } else if (selectedSortOption === 'descName') {
             filteredPokemons.sort((a, b) => b.name.localeCompare(a.name)); // Orden descendente por nombre
+        } else if (selectedSortOption === 'ascAttack') {
+            filteredPokemons.sort((a, b) => parseInt(a.attack) - parseInt(b.attack)); // Orden ascendente por ataque
+        } else if (selectedSortOption === 'descAttack') {
+            filteredPokemons.sort((a, b) => parseInt(b.attack) - parseInt(a.attack)); // Orden descendente por ataque
         }
-        
+
         const startIndex = (currentPage - 1) * POKEMONS_PER_PAGE;
         const endIndex = startIndex + POKEMONS_PER_PAGE;
         return filteredPokemons.slice(startIndex, endIndex);
@@ -197,8 +201,8 @@ const HomePage = ({ filterByType, sortByAscName, sortByDescName }) => {
                 <option value="">Ordenar por...</option>
                 <option value="ascName">Nombre (Asc)</option>
                 <option value="descName">Nombre (Desc)</option>
-                {/* <option value="ascAttack">Ataque (Asc)</option>
-                <option value="descAttack">Ataque (Desc)</option> */}
+                <option value="ascAttack">Ataque (Asc)</option>
+                <option value="descAttack">Ataque (Desc)</option>
             </select>
             {error && <p>Error: {error}</p>}
             {showForm && <Form />} {/* Renderizar el formulario si showForm es verdadero */}
@@ -224,8 +228,8 @@ const mapDispatchToProps = {
 //   filterByOrigin,
   sortByAscName,
   sortByDescName,
-//   sortByAscAttack,
-//   sortByDescAttack,
+  sortByAscAttack,
+  sortByDescAttack,
     // filterByOriginDB,
     // filterByOriginAPI,
 };

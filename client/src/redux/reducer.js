@@ -32,24 +32,26 @@ const rootReducer = (state = initialState, action) => {
         return {
           ...state,
           sortBy: 'name_asc',
-          pokemonData: [...state.pokemonData.sort((a, b) => a.name.localeCompare(b.name))],
+          pokemonData: [...state.pokemonData.sort((a, b) => a.name.localeCompare(b.name))]
         };
       case SORT_BY_NAME_DESC:
         return {
           ...state,
           sortBy: 'name_desc',
-          pokemonData: [...state.pokemonData.sort((a, b) => b.name.localeCompare(a.name))],
+          pokemonData: [...state.pokemonData.sort((a, b) => b.name.localeCompare(a.name))]
         };
-      // case SORT_BY_ATTACK_ASC:
-      //   return {
-      //     ...state,
-      //     sortBy: 'attack_asc',
-      //   };
-      // case SORT_BY_ATTACK_DESC:
-      //   return {
-      //     ...state,
-      //     sortBy: 'attack_desc',
-      //   };
+      case SORT_BY_ATTACK_ASC:
+        return {
+          ...state,
+          sortBy: 'attack_asc',
+          pokemonData: [...state.pokemonData.sort((a, b) => parseInt(a.attack) - parseInt(b.attack))]
+        };
+      case SORT_BY_ATTACK_DESC:
+        return {
+          ...state,
+          sortBy: 'attack_desc',
+          pokemonData: [...state.pokemonData.sort((a, b) => parseInt(b.attack) - parseInt(a.attack))]
+        };
     default:
       return state;
   }
