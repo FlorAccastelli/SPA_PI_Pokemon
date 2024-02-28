@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { filterByType } from '../../redux/actions';
-import { filterByOriginDB, filterByOriginAPI } from '../../redux/actions';
+import { filterByType, sortByAscName, sortByDescName } from '../../redux/actions';
+// import { filterByOriginDB, filterByOriginAPI } from '../../redux/actions';
 import Cards from '../cards/Cards'; // Importar el componente Cards
 import Detail from '../detail/Detail'; // Importar el componente Detail
 import Form from '../formPage/FormPage'; // Importar el componente Form
@@ -11,7 +11,7 @@ import styles from './HomePage.module.css';
 const POKEMONS_PER_PAGE = 12;
 
 // const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) => {
-const HomePage = ({ filterByType }) => {
+const HomePage = ({ filterByType, sortByAscName, sortByDescName }) => {
     const [name, setName] = useState("");
     const [pokemonData, setPokemonData] = useState([]);
     const [error, setError] = useState(null);
@@ -110,31 +110,38 @@ const HomePage = ({ filterByType }) => {
     //     } 
     // };
 
-    // const handleSortOptionChange = (event) => {
-    //     setSelectedSortOption(event.target.value); // Actualizar el estado con la opción de ordenamiento seleccionada
-    //     switch (event.target.value) {
-    //         case 'ascName':
-    //             sortByAscName(); // Ordenar por nombre ascendente
-    //             break;
-    //         case 'descName':
-    //             sortByDescName(); // Ordenar por nombre descendente
-    //             break;
-    //         case 'ascAttack':
-    //             sortByAscAttack(); // Ordenar por ataque ascendente
-    //             break;
-    //         case 'descAttack':
-    //             sortByDescAttack(); // Ordenar por ataque descendente
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // };
+    const handleSortOptionChange = (event) => {
+        setSelectedSortOption(event.target.value); // Actualizar el estado con la opción de ordenamiento seleccionada
+        switch (event.target.value) {
+            case 'ascName':
+                sortByAscName(); // Ordenar por nombre ascendente
+                break;
+            case 'descName':
+                sortByDescName(); // Ordenar por nombre descendente
+                break;
+            // case 'ascAttack':
+            //     sortByAscAttack(); // Ordenar por ataque ascendente
+            //     break;
+            // case 'descAttack':
+            //     sortByDescAttack(); // Ordenar por ataque descendente
+            //     break;
+            default:
+                break;
+        }
+    };
 
     const getPokemonsByPage = () => {
         let filteredPokemons = pokemonData;
         if (selectedType) {
             filteredPokemons = filteredPokemons.filter(pokemon => pokemon.types && pokemon.types.includes(selectedType));
         }
+
+        if (selectedSortOption === 'ascName') {
+            filteredPokemons.sort((a, b) => a.name.localeCompare(b.name)); // Orden ascendente por nombre
+        } else if (selectedSortOption === 'descName') {
+            filteredPokemons.sort((a, b) => b.name.localeCompare(a.name)); // Orden descendente por nombre
+        }
+        
         const startIndex = (currentPage - 1) * POKEMONS_PER_PAGE;
         const endIndex = startIndex + POKEMONS_PER_PAGE;
         return filteredPokemons.slice(startIndex, endIndex);
@@ -186,13 +193,13 @@ const HomePage = ({ filterByType }) => {
             <br />
             <button onClick={search}>Buscar por nombre</button>
             <button onClick={handleFormClick}>Crea tu Pokemon</button>
-            {/* <select value={selectedSortOption} onChange={handleSortOptionChange}>
+            <select value={selectedSortOption} onChange={handleSortOptionChange}>
                 <option value="">Ordenar por...</option>
                 <option value="ascName">Nombre (Asc)</option>
                 <option value="descName">Nombre (Desc)</option>
-                <option value="ascAttack">Ataque (Asc)</option>
-                <option value="descAttack">Ataque (Desc)</option>
-            </select> */}
+                {/* <option value="ascAttack">Ataque (Asc)</option>
+                <option value="descAttack">Ataque (Desc)</option> */}
+            </select>
             {error && <p>Error: {error}</p>}
             {showForm && <Form />} {/* Renderizar el formulario si showForm es verdadero */}
             {showDetail && pokemonData.length === 1 && <Detail pokemon={pokemonData[0]} />} {/* Mostrar el detalle solo si hay un Pokémon */}
@@ -208,14 +215,15 @@ const HomePage = ({ filterByType }) => {
 
 const mapStateToProps = (state) => ({
     typeFilter: state.typeFilter,
+    sortBy: state.sortBy
     // originFilter: state.originFilter,
 });
 
 const mapDispatchToProps = {
   filterByType,
 //   filterByOrigin,
-//   sortByAscName,
-//   sortByDescName,
+  sortByAscName,
+  sortByDescName,
 //   sortByAscAttack,
 //   sortByDescAttack,
     // filterByOriginDB,

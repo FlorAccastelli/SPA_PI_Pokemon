@@ -10,18 +10,18 @@ export const filterByType = (type) => ({
 //   payload: origin,
 // });
 
-// export const sortByAscName = () => ({
-//   type: SORT_BY_NAME_ASC,
-// });
+export const sortByAscName = () => ({
+  type: SORT_BY_NAME_ASC,
+});
 
-// export const sortByDescName = () => ({
-//   type: SORT_BY_NAME_DESC,
-// });
+export const sortByDescName = () => ({
+  type: SORT_BY_NAME_DESC,
+});
 
-// export const sortByAscAttack = () => ({
-//   type: SORT_BY_ATTACK_ASC,
-// });
+export const sortByAscAttack = () => ({
+  type: SORT_BY_ATTACK_ASC,
+});
 
-// export const sortByDescAttack = () => ({
-//   type: SORT_BY_ATTACK_DESC,
-// });
+export const sortByDescAttack = () => ({
+  type: SORT_BY_ATTACK_DESC,
+});

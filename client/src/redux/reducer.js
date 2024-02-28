@@ -1,12 +1,12 @@
-import { FILTER_BY_TYPE } from './actionTypes';
+import { FILTER_BY_TYPE, SORT_BY_NAME_ASC, SORT_BY_NAME_DESC, SORT_BY_ATTACK_ASC, SORT_BY_ATTACK_DESC } from './actionTypes';
 
 // import { FILTER_BY_ORIGIN_DB, FILTER_BY_ORIGIN_API } from './actionTypes'
 
 const initialState = {
    typeFilter: null,
-   pokemonData: []
+   pokemonData: [],
   // originFilter: null,
-  // sortBy: null,
+  sortBy: null,
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -28,16 +28,18 @@ const rootReducer = (state = initialState, action) => {
     //       ...state,
     //       originFilter: 'API',
     //     };
-      // case SORT_BY_NAME_ASC:
-      //   return {
-      //     ...state,
-      //     sortBy: 'name_asc',
-      //   };
-      // case SORT_BY_NAME_DESC:
-      //   return {
-      //     ...state,
-      //     sortBy: 'name_desc',
-      //   };
+      case SORT_BY_NAME_ASC:
+        return {
+          ...state,
+          sortBy: 'name_asc',
+          pokemonData: [...state.pokemonData.sort((a, b) => a.name.localeCompare(b.name))],
+        };
+      case SORT_BY_NAME_DESC:
+        return {
+          ...state,
+          sortBy: 'name_desc',
+          pokemonData: [...state.pokemonData.sort((a, b) => b.name.localeCompare(a.name))],
+        };
       // case SORT_BY_ATTACK_ASC:
       //   return {
       //     ...state,
