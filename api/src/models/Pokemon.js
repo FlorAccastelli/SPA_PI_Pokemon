@@ -41,8 +41,8 @@ module.exports = (sequelize) => {
     weight: {
       type: DataTypes.FLOAT,
       allowNull: true
-    },
-    // timestamps: false
-  });
+    }
+  },
+  { timestamps: false });
   return Pokemon;
 };

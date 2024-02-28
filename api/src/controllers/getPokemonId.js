@@ -11,6 +11,7 @@ async function getPokemonId(req, res) {
         if(!pokemon) {
             const response = await axios.get(`${URL}${idPokemon}`);
             const data = response.data;
+            
 
             pokemon = await Pokemon.create({
                 id: data.id,

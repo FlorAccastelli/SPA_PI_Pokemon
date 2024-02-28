@@ -129,7 +129,7 @@ function Form() {
                 <br />
                 <label htmlFor="types">
                     Tipo:
-                    <div className={styles.checkBox}>
+                    <div>
                         <input type="checkbox" name="types" value="normal" checked={formData.types.includes('normal')} onChange={handleChange} />
                         <label htmlFor="normal">Normal</label>
                     </div>

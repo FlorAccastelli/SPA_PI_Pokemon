@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { filterByType, filterByOrigin } from '../../redux/actions';
+import { filterByType } from '../../redux/actions';
+import { filterByOriginDB, filterByOriginAPI } from '../../redux/actions';
 import Cards from '../cards/Cards'; // Importar el componente Cards
 import Detail from '../detail/Detail'; // Importar el componente Detail
 import Form from '../formPage/FormPage'; // Importar el componente Form
@@ -9,7 +10,8 @@ import styles from './HomePage.module.css';
 
 const POKEMONS_PER_PAGE = 12;
 
-const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) => {
+// const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) => {
+const HomePage = ({ filterByType }) => {
     const [name, setName] = useState("");
     const [pokemonData, setPokemonData] = useState([]);
     const [error, setError] = useState(null);
@@ -17,31 +19,37 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
     const [showDetail, setShowDetail] = useState(false); // Estado para controlar si se muestra el detalle del Pokémon
     const [showForm, setShowForm] = useState(false); // Estado para controlar si se muestra el formulario
     const [selectedType, setSelectedType] = useState(''); // Estado para almacenar el tipo seleccionado
-    const [selectedOrigin, setSelectedOrigin] = useState(''); // Estado para almacenar el origen seleccionado
+    // const [selectedOrigin, setSelectedOrigin] = useState(''); // Estado para almacenar el origen seleccionado
     const [currentPage, setCurrentPage] = useState(1); // Estado para almacenar la página actual
+    const [selectedSortOption, setSelectedSortOption] = useState('');
 
     const handleChange = (event) => {
         setName(event.target.value);
     };
 
     const search = async () => {
-        try {
+        // try {
             const response = await axios.get(`http://localhost:3001/pokemons/find?name=${name}`);
-            if (response.status === 200) {
-                const data = response.data;
-                setPokemonData(Array.isArray(data) ? data : [data]);
+            console.log(response.data)
+            // if (response.status === 200 && Array.isArray(response.data) && response.data.length > 0) {
+                setPokemonData(response.data);
                 setError(null); 
-            } else {
-                throw new Error('No se pudo obtener la información del Pokémon');
-            }
-        } catch (error) {
-            console.error('Error al obtener información del Pokémon:', error);
-            setPokemonData([]); 
-            setError('Ocurrió un error al buscar el Pokémon. Por favor, inténtalo de nuevo más tarde.'); 
-        } finally {
-            setName("");
-            setShowDetail(true); //? Asegurarse de que el detalle no se muestre al realizar una búsqueda
-        }
+            // } else {
+            //     setPokemonData([]);
+        //     if (response.status !== 200) {
+        //         throw new Error('La solicitud no pudo completarse: estado ' + response.status);
+        //         } else {
+        //         throw new Error('No se encontraron Pokémon con ese nombre');
+        //         }
+        //     }
+        // } catch (error) {
+        //     console.error('Error al obtener información del Pokémon:', error);
+        //     setPokemonData([]); 
+        //     setError('Ocurrió un error al buscar el Pokémon. Por favor, inténtalo de nuevo más tarde.'); 
+        // } finally {
+        //     setName("");
+        //     setShowDetail(true); //? Asegurarse de que el detalle no se muestre al realizar una búsqueda
+        // }
     };
 
     useEffect(()=> {
@@ -51,14 +59,17 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
                     const response = await axios.get('http://localhost:3001/pokemons');
                     if (response.status === 200) {
                         let data = response.data;
-                        if (typeFilter) {
-                            data = data.filter(pokemon => pokemon.type === typeFilter);
+                        // if (typeFilter) {
+                        //     data = data.filter(pokemon => pokemon.type === typeFilter);
+                        // }
+                        // if (originFilter) {
+                        //     data = data.filter(pokemon => pokemon.origin === originFilter);
+                        // }
+                        if (selectedType) {
+                            data = data.filter(pokemon => pokemon.type === selectedType);
                         }
-                        if (originFilter) {
-                            data = data.filter(pokemon => pokemon.origin === originFilter);
-                        }
-                        setPokemonData(data); 
-                        setError(null); 
+                        setPokemonData(data);
+                        setError(null);
                         setLoaded(true); // Marcar que los datos han sido cargados
                     } else {
                         throw new Error('No se pudo obtener la información de los Pokémon');
@@ -72,7 +83,7 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
 
             fetchData();
         }
-    }, [loaded, typeFilter, originFilter]); // Ejecutar solo cuando el estado 'loaded' cambie
+    }, [loaded, selectedType]); // Ejecutar solo cuando el estado 'loaded' cambie
 
     const handleDetailClick = () => {
         setShowDetail(true); // Mostrar el detalle cuando se haga clic en una carta
@@ -83,19 +94,50 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
     };
 
     const handleTypeChange = (event) => {
+        
         setSelectedType(event.target.value); // Actualizar el estado con el tipo seleccionado
+        console.log("hola")
         filterByType(event.target.value); // Filtrar por tipo
     };
 
-    const handleOriginChange = (event) => {
-        setSelectedOrigin(event.target.value); // Actualizar el estado con el origen seleccionado
-        filterByOrigin(event.target.value); // Filtrar por origen
-    };
+    // const handleOriginChange = (event) => {
+    //     const selectedOrigin = event.target.value;
+    //     setSelectedOrigin(selectedOrigin); // Actualizar el estado con el origen seleccionado
+    //     if (selectedOrigin === 'api') {
+    //         filterByOriginAPI(); // Activar acción para filtrar por Pokémon de la API
+    //     } else if (selectedOrigin === 'db') {
+    //         filterByOriginDB(); // Activar acción para filtrar por Pokémon de la Base de Datos
+    //     } 
+    // };
+
+    // const handleSortOptionChange = (event) => {
+    //     setSelectedSortOption(event.target.value); // Actualizar el estado con la opción de ordenamiento seleccionada
+    //     switch (event.target.value) {
+    //         case 'ascName':
+    //             sortByAscName(); // Ordenar por nombre ascendente
+    //             break;
+    //         case 'descName':
+    //             sortByDescName(); // Ordenar por nombre descendente
+    //             break;
+    //         case 'ascAttack':
+    //             sortByAscAttack(); // Ordenar por ataque ascendente
+    //             break;
+    //         case 'descAttack':
+    //             sortByDescAttack(); // Ordenar por ataque descendente
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // };
 
     const getPokemonsByPage = () => {
+        let filteredPokemons = pokemonData;
+        if (selectedType) {
+            filteredPokemons = filteredPokemons.filter(pokemon => pokemon.types && pokemon.types.includes(selectedType));
+        }
         const startIndex = (currentPage - 1) * POKEMONS_PER_PAGE;
         const endIndex = startIndex + POKEMONS_PER_PAGE;
-        return pokemonData.slice(startIndex, endIndex);
+        return filteredPokemons.slice(startIndex, endIndex);
     };
 
     // Función para cambiar a la página siguiente
@@ -135,15 +177,22 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
                 <option value="unknown">Desconocido</option>
                 <option value="shadow">Sombra</option>
             </select>
-            <select value={selectedOrigin} onChange={handleOriginChange}>
+            {/* <select value={selectedOrigin} onChange={handleOriginChange}>
                 <option value="">Mostrar todos los Pokémons</option>
                 <option value="api">Mostrar solo Pokémons de la API</option>
                 <option value="db">Mostrar solo Pokémons de la Base de Datos</option>
-            </select>
+            </select> */}
             <input type='search' value={name} onChange={handleChange} placeholder="Ingresa el nombre de un Pokemon"/>
             <br />
             <button onClick={search}>Buscar por nombre</button>
             <button onClick={handleFormClick}>Crea tu Pokemon</button>
+            {/* <select value={selectedSortOption} onChange={handleSortOptionChange}>
+                <option value="">Ordenar por...</option>
+                <option value="ascName">Nombre (Asc)</option>
+                <option value="descName">Nombre (Desc)</option>
+                <option value="ascAttack">Ataque (Asc)</option>
+                <option value="descAttack">Ataque (Desc)</option>
+            </select> */}
             {error && <p>Error: {error}</p>}
             {showForm && <Form />} {/* Renderizar el formulario si showForm es verdadero */}
             {showDetail && pokemonData.length === 1 && <Detail pokemon={pokemonData[0]} />} {/* Mostrar el detalle solo si hay un Pokémon */}
@@ -159,12 +208,18 @@ const HomePage = ({ filterByType, filterByOrigin, typeFilter, originFilter }) =>
 
 const mapStateToProps = (state) => ({
     typeFilter: state.typeFilter,
-    originFilter: state.originFilter,
+    // originFilter: state.originFilter,
 });
 
 const mapDispatchToProps = {
   filterByType,
-  filterByOrigin,
+//   filterByOrigin,
+//   sortByAscName,
+//   sortByDescName,
+//   sortByAscAttack,
+//   sortByDescAttack,
+    // filterByOriginDB,
+    // filterByOriginAPI,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

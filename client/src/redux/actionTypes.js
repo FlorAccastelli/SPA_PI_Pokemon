@@ -1,0 +1,7 @@
+export const FILTER_BY_TYPE = 'FILTER_BY_TYPE';
+// export const FILTER_BY_ORIGIN_DB = 'FILTER_BY_ORIGIN_DB';
+// export const FILTER_BY_ORIGIN_API = 'FILTER_BY_ORIGIN_API';
+// export const SORT_BY_NAME_ASC = 'SORT_BY_NAME_ASC';
+// export const SORT_BY_NAME_DESC = 'SORT_BY_NAME_DESC';
+// export const SORT_BY_ATTACK_ASC = 'SORT_BY_ATTACK_ASC';
+// export const SORT_BY_ATTACK_DESC = 'SORT_BY_ATTACK_DESC';
